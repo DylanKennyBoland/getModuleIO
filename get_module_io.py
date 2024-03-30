@@ -24,7 +24,7 @@
 # module file. Should the Verilog file be located in a different directory, then the path
 # to the file can be given. An example of how the script is called:
 #
-#               get_module_io.py --filename accumulator.v
+#               get_module_io.py --filename memcd_auto_refresh.v
 #
 
 
@@ -121,8 +121,8 @@ if __name__ == "__main__":
     # ==== Define the Patterns to Look For ====
     moduleNamePattern    = re.compile(r'(?<!(?: |/|[a-zA-Z\_]))module\s+(?:\$\[PREFIX\])?([a-zA-Z\_0-9]+)[\n\s]*#?[\n\s]*\(')
     moduleParamsPattern  = re.compile(r'(?<!(?: |/|[a-zA-Z\_]))parameter\s*(?:\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]\s*){0,2}\s*([a-zA-Z\_0-9]+)\s*=')
-    moduleInputsPattern  = re.compile(r'(?<!(?: |/|[a-zA-Z\_]))(input){1}\s+(wire\b|reg\b)?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\})?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\})?\s*([a-zA-Z\_0-9\$\{\}]+)\s*,?')
-    moduleOutputsPattern  = re.compile(r'(?<!(?: |/|[a-zA-Z\_]))(output){1}\s+(wire\b|reg\b)?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\})?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\})?\s*([a-zA-Z\_0-9\$\{\}]+)\s*,?')
+    moduleInputsPattern  = re.compile(r'(?<!(?: |/|[a-zA-Z\_]))(input){1}\s+(wire\b|reg\b)?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\}|\$\[[a-zA-Z\_]+\])?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\}|\$\[[a-zA-Z\_]+\])?\s*([a-zA-Z\_0-9\$\{\}]+)\s*,?')
+    moduleOutputsPattern  = re.compile(r'(?<!(?: |/|[a-zA-Z\_]))(output){1}\s+(wire\b|reg\b)?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\}|\$\[[a-zA-Z\_]+\])?\s*(\[[`a-zA-Z0-9\_\-\+\:\*/ ]+\]|\$\$\{[a-zA-Z\_]+\}|\$\[[a-zA-Z\_]+\])?\s*([a-zA-Z\_0-9\$\{\}]+)\s*,?')
 
     # ==== Extract the Module Name first ====
     matches = re.findall(moduleNamePattern, moduleContents)
@@ -157,9 +157,6 @@ if __name__ == "__main__":
         signalType = moduleInputs[i][1] # the 2nd thing that will match in a port declaration is the signal type (i.e., wire or reg)
         signalDimension = moduleInputs[i][2] + moduleInputs[i][3] # after the signal type comes the signal dimension
         signalName = moduleInputs[i][4] # and after the signal dimension comes the signal name
-        if signalName == "wire":
-            print("")
-            print(moduleInputs[i])
         inputDictionary[signalName] = {"signalType": signalType,
                 "signalDimension": signalDimension
                 } 
