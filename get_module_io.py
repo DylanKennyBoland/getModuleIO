@@ -24,7 +24,7 @@
 # module file. Should the Verilog file be located in a different directory, then the path
 # to the file can be given. An example of how the script is called:
 #
-#               get_module_io.py --filename memcd_auto_refresh.v
+#               get_module_io.py --filename accumulator.v
 #
 
 
